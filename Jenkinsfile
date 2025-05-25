@@ -26,7 +26,7 @@ pipeline {
 
         stage('Build & Test') {
             steps {
-                sh 'mvn clean verify -Dcucumber.filter.tags="@Triangulo and not @WIP"'
+                sh 'mvn clean verify'
             }
         }
 
