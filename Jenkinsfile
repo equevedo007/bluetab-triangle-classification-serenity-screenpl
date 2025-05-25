@@ -47,8 +47,7 @@ pipeline {
 
         always {
             archiveArtifacts artifacts: 'target/site/serenity/**', fingerprint: true
-                    junit '**/target/site/serenity/*.xml'
-                    cleanWs() // <-- Aquí al final
-        }
+            junit '**/target/site/serenity/*.xml'
+                }
     }
 }
