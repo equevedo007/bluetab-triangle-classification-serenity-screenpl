@@ -24,6 +24,7 @@ Feature: Clasificación y validación de triángulos
       | Edinson | Roger   | 5     | 6     | 7     | Escaleno   |
       | Edinson | Diana   | 6     | 5     | 7     | Escaleno   |
       | Edinson | Hugo    | 7     | 6     | 5     | Escaleno   |
+      | Edinson | Hugo    | 7     | 6     | 5     | Escaleno   |
 
 
   @Triangulo
@@ -48,4 +49,5 @@ Feature: Clasificación y validación de triángulos
       | Edinson | Juan    | 2     | 2     | 5     | No cumple la regla de la desigualdad triangular |
       | Edinson | Miguel  | 10    | 2     | 1     | No cumple la regla de la desigualdad triangular |
       | Edinson | John    | 1     | 100   | 2     | No cumple la regla de la desigualdad triangular |
+      | Edinson | Carlos  | 4     | 9     | 20    | No cumple la regla de la desigualdad triangular |
       | Edinson | Carlos  | 4     | 9     | 20    | No cumple la regla de la desigualdad triangular |
