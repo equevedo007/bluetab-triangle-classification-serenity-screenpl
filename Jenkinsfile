@@ -44,17 +44,11 @@ pipeline {
     }
 
     post {
-        success {
-            archiveArtifacts artifacts: "${REPORT_DIR}/**", fingerprint: true
-            junit '**/target/site/serenity/*.xml'
-        }
-
-        failure {
-            echo 'Build fallido. Revisa los logs o los artefactos.'
-        }
 
         always {
-            cleanWs()
+            archiveArtifacts artifacts: 'target/site/serenity/**', fingerprint: true
+                    junit '**/target/site/serenity/*.xml'
+                    cleanWs() // <-- Aquí al final
         }
     }
 }
