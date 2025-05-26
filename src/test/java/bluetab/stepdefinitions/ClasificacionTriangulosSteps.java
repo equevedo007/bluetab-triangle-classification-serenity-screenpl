@@ -82,5 +82,10 @@ public class ClasificacionTriangulosSteps {
 
     }
 
+    @Then("el sistema deberia dibujar un triangulo dentro del area canvas")
+    public void el_sistema_deberia_dibujar_un_triangulo_dentro_del_area_canvas() {
+        System.out.println("Casu de Prueba Manual");
+    }
+
 
 }

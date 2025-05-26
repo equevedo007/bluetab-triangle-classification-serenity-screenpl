@@ -1,8 +1,8 @@
 Feature: Clasificación y validación de triángulos
 
   Como usuario que desea verificar el tipo de triángulo según sus lados
-  Quiero ingresar tres longitudes para determinar si forman un triángulo válido
-  Y, en caso afirmativo, conocer correctamente su clasificación
+  Quiero ingresar tres longitudes
+  para determinar si forman un triángulo válido Y en caso afirmativo conocer correctamente su clasificación
 
 
   @Triangulo
@@ -51,3 +51,12 @@ Feature: Clasificación y validación de triángulos
       | Edinson | John    | 1     | 100   | 2     | No cumple la regla de la desigualdad triangular |
       | Edinson | Carlos  | 4     | 9     | 20    | No cumple la regla de la desigualdad triangular |
 
+  @Manual
+  Scenario: Visualizacion grafica del triangulo en el canvas
+    Given el "Usuario" se dirige a la aplicacian de prueba de triangulos
+    When el usuario ingresa su nombre "Edinson"
+    And escribe "3" en el campo Side A
+    And escribe "4" en el campo Side B
+    And escribe "5" en el campo Side C
+    And presiona el botón Check
+    Then el sistema deberia dibujar un triangulo dentro del area canvas
