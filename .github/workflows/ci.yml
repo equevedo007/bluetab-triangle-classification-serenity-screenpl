@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]   # cambia a "master" si es tu rama principal
+  pull_request:
+
+# Equivalente a timeout y control de ejecuciones simultáneas
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15     # como tu options { timeout(...) } en Jenkins
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Equivalente a tools { jdk 'jdk-17' } + cache Maven
+      - name: Set up Java 17 (Temurin) with Maven cache
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      # Si usabas MAVEN_OPTS para repo local, Actions ya cachea ~/.m2 automáticamente.
+      # Ajusta flags Maven según lo que hacías en Jenkins (verify, perfiles, etc.)
+      - name: Build & Test (Maven verify)
+        run: mvn -B verify
+
+      # Equivalente a archiveArtifacts 'target/site/serenity/**'
+      - name: Publicar reporte Serenity (artifact)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: serenity-report
+          path: target/site/serenity/**
+          if-no-files-found: ignore
+          retention-days: 14
+
+      # Equivalente a junit '**/target/site/serenity/*.xml'
+      # Tip: GitHub muestra JUnit como artifact; si quieres anotaciones en PR, usa una acción de test reporting.
+      - name: Publicar resultados JUnit (artifact)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-results
+          path: "**/target/site/serenity/*.xml"
+          if-no-files-found: ignore
+          retention-days: 14
+
+      # Mensaje equivalente a tu 'echo' final (puedes personalizar)
+      - name: Mensaje de fin
+        if: always()
+        run: |
+          echo "Build finalizado. Descarga el artifact 'serenity-report' para ver el informe."
+          echo "Si quieres alojar el reporte estático, configura una publicación (Pages, S3, Nginx, etc.)."
