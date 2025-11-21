@@ -11,7 +11,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <serenity.version>4.2.34</serenity.version>
+        <serenity.version>4.3.4</serenity.version>
         <junit-vintage-engine.version>5.12.2</junit-vintage-engine.version>
         <junit-platform-suite.version>1.12.2</junit-platform-suite.version>
         <cucumber-junit-platform-engine.version>7.22.2</cucumber-junit-platform-engine.version>
@@ -83,7 +83,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.5.18</version>
+            <version>1.5.21</version>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
