@@ -1,152 +1,232 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
+    <!-- === Identidad del proyecto (desde tu pom01) === -->
     <groupId>com.bluetab</groupId>
     <artifactId>triangle-screenplay-automation</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>Bluetab-Triangle-SerenityBDD-Screenplay-Automation</name>
+    <name>Bluetab Triangle Serenity Screenplay Cucumber</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <serenity.version>5.0.2</serenity.version>
-        <junit-vintage-engine.version>6.0.1</junit-vintage-engine.version>
-        <junit-platform-suite.version>6.0.1</junit-platform-suite.version>
-        <cucumber-junit-platform-engine.version>7.33.0</cucumber-junit-platform-engine.version>
-        <encoding>UTF-8</encoding>
+
+        <!-- Serenity -->
+        <serenity.version>5.3.2</serenity.version>
+
+        <!-- Cucumber -->
+        <cucumber.version>7.34.2</cucumber.version>
+
+        <!-- JUnit: alinea automáticamente Jupiter + Platform (evita tus errores) -->
+        <junit.bom.version>5.13.1</junit.bom.version>
+
+        <!-- Maven plugins (estilo starter + tus versiones ya buenas) -->
+        <maven.surefire.version>3.5.4</maven.surefire.version>
+        <maven.failsafe.version>3.5.4</maven.failsafe.version>
+        <maven.compiler.version>3.14.1</maven.compiler.version>
+
+        <!-- Java -->
+        <maven.compiler.release>21</maven.compiler.release>
+
+        <!-- Parallel (del starter, pero por defecto 1 para pruebas web estables) -->
+        <parallel.tests>1</parallel.tests>
+
+        <!-- Reportes Serenity -->
         <tags></tags>
         <webdriver.base.url></webdriver.base.url>
+
+        <!-- Libs adicionales -->
+        <logback.version>1.5.32</logback.version>
+        <assertj.version>3.27.7</assertj.version>
+
+        <!-- Allure -->
+        <allure.maven.version>2.17.0</allure.maven.version>
+        <allure.junit5.version>2.29.1</allure.junit5.version>
     </properties>
+
+    <!-- ✅ CLAVE: JUnit BOM para evitar "unaligned versions" en IntelliJ/Maven -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
+
+        <!-- === Serenity + Cucumber + Screenplay (tu proyecto) === -->
         <dependency>
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-core</artifactId>
             <version>${serenity.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-cucumber</artifactId>
             <version>${serenity.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-screenplay</artifactId>
             <version>${serenity.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-screenplay-webdriver</artifactId>
             <version>${serenity.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-ensure</artifactId>
             <version>${serenity.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- === JUnit 5 (alineado por BOM) === -->
         <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-launcher</artifactId>
-            <version>${junit-platform-suite.version}</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-junit-platform-engine</artifactId>
-            <version>${cucumber-junit-platform-engine.version}</version>
-            <scope>test</scope>
-        </dependency>
+
+        <!-- Suite API para runner JUnit 5 (@Suite) -->
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-suite</artifactId>
-            <version>${junit-platform-suite.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Cucumber engine (JUnit Platform). Excluimos platform-engine para que BOM alinee -->
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junit-vintage-engine.version}</version>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit-platform-engine</artifactId>
+            <version>${cucumber.version}</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.platform</groupId>
+                    <artifactId>junit-platform-engine</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
+        <!-- Cucumber Java (para stepdefs) -->
         <dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
-            <version>${junit-vintage-engine.version}</version>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>${cucumber.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- === Logging y asserts (del starter + tu proyecto) === -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.5.23</version>
+            <version>${logback.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.27.6</version>
+            <version>${assertj.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- === Tus dependencias extra (pom01) === -->
         <dependency>
             <groupId>net.java.dev.jna</groupId>
             <artifactId>jna</artifactId>
             <version>5.18.1</version>
         </dependency>
+
         <dependency>
             <groupId>net.masterthought</groupId>
             <artifactId>cucumber-reporting</artifactId>
             <version>5.10.1</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.httpcomponents.client5</groupId>
             <artifactId>httpclient5</artifactId>
             <version>5.6</version>
         </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>2.0.17</version>
         </dependency>
+
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.21.0</version>
         </dependency>
+
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
             <version>1.1.1</version>
         </dependency>
+
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20251224</version>
         </dependency>
+
+        <!-- === Allure (opcional). Blindado para que NO meta launcher viejo === -->
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-junit5</artifactId>
-            <version>2.29.1</version>
+            <version>${allure.junit5.version}</version>
             <scope>test</scope>
+            <exclusions>
+                <!-- Evita que Allure fuerce un junit-platform-launcher desalineado -->
+                <exclusion>
+                    <groupId>org.junit.platform</groupId>
+                    <artifactId>junit-platform-launcher</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
     </dependencies>
+
     <build>
         <plugins>
+
+            <!-- Unit tests (skip) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.4</version>
+                <version>${maven.surefire.version}</version>
                 <configuration>
                     <skip>true</skip>
                 </configuration>
             </plugin>
+
+            <!-- Integration tests (Cucumber suite) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.5.4</version>
+                <version>${maven.failsafe.version}</version>
                 <configuration>
                     <includes>
                         <include>**/*Test.java</include>
@@ -154,12 +234,18 @@
                         <include>**/*TestSuite.java</include>
                         <include>**/When*.java</include>
                     </includes>
+
                     <systemPropertyVariables>
                         <webdriver.base.url>${webdriver.base.url}</webdriver.base.url>
+                        <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
                     </systemPropertyVariables>
-                    <parallel>classesAndMethods</parallel>
-                    <useUnlimitedThreads>true</useUnlimitedThreads>
+
+                    <!-- Paralelismo controlado (por defecto 1) -->
+                    <parallel>classes</parallel>
+                    <threadCount>${parallel.tests}</threadCount>
+                    <forkCount>${parallel.tests}</forkCount>
                 </configuration>
+
                 <executions>
                     <execution>
                         <goals>
@@ -169,24 +255,29 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.14.1</version>
+                <version>${maven.compiler.version}</version>
                 <configuration>
-                    <release>21</release>
-                    <target>21</target>
+                    <release>${maven.compiler.release}</release>
                 </configuration>
             </plugin>
+
+            <!-- Serenity reports -->
             <plugin>
                 <groupId>net.serenity-bdd.maven.plugins</groupId>
                 <artifactId>serenity-maven-plugin</artifactId>
                 <version>${serenity.version}</version>
+
                 <configuration>
                     <tags>${tags}</tags>
                     <reports>single-page-html</reports>
                     <generateFullReport>true</generateFullReport>
                 </configuration>
+
                 <dependencies>
                     <dependency>
                         <groupId>net.serenity-bdd</groupId>
@@ -194,6 +285,7 @@
                         <version>${serenity.version}</version>
                     </dependency>
                 </dependencies>
+
                 <executions>
                     <execution>
                         <id>serenity-reports</id>
@@ -204,14 +296,18 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Allure maven plugin (si lo usas) -->
             <plugin>
                 <groupId>io.qameta.allure</groupId>
                 <artifactId>allure-maven</artifactId>
-                <version>2.17.0</version>
+                <version>${allure.maven.version}</version>
                 <configuration>
                     <resultsDirectory>allure-results</resultsDirectory>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
+
 </project>
